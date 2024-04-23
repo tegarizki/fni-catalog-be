@@ -6,11 +6,17 @@ import { TypeOrmConfigService } from './common/config/typeorm.config';
 import { UserModule } from './api/user/user.module';
 import { AuthModule } from './api/auth/auth.module';
 import { CatalogModule } from './api/catalog/catalog.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'src', 'public'),
+      serveRoot: '/public'
+    }),
     ConfigModule.forRoot({envFilePath, isGlobal: true}),
     TypeOrmModule.forRootAsync({useClass: TypeOrmConfigService}),
     AuthModule,
