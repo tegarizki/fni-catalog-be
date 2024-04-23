@@ -19,6 +19,9 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       migrations: ['dist/migrations/*.{ts,js}'],
       migrationsTableName: 'typeorm_migrations',
       logger: 'file',
+      ssl: {
+        rejectUnauthorized: false, // In some cases, you may need this
+      },
     };
   }
 }
