@@ -3,7 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import { UserEntity } from '@/shared/entity/user.entity';
+import { MstUserEntity } from '@/shared/entity/mst-user.entity';
 import { AuthController } from './auth.controller';
 import { AuthHelper } from '@/common/helper/auth.helper';
 import { AuthService } from './auth.service';
@@ -21,7 +21,7 @@ import { UserModule } from '@/api/user/user.module';
         signOptions: { expiresIn: config.get('JWT_EXPIRES') },
       }),
     }),
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([MstUserEntity]),
     UserModule,
   ],
   controllers: [AuthController],

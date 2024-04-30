@@ -1,22 +1,24 @@
 import { FindAllCatalogDto } from "@/shared/dto/find-all-catalog.dto";
 import { PageMetaDto } from "@/shared/dto/page-meta.dto";
 import { PageDto } from "@/shared/dto/page.dto";
-import { CatalogEntity } from "@/shared/entity/catalog.entity";
+import { MstAauEntity } from "@/shared/entity/mst-aau.entity";
+import { MstCatalogEntity } from "@/shared/entity/mst-catalog.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { filter } from "rxjs";
 import { Repository } from "typeorm";
 
 @Injectable()
-export class CatalogService {
-    @InjectRepository(CatalogEntity)
-    private readonly _catalogEntity: Repository<CatalogEntity>;
+export class ProductService {
+    @InjectRepository(MstCatalogEntity)
+    private readonly mstcatalogRepository: Repository<MstCatalogEntity>;
+    
+    @InjectRepository(MstAauEntity)
+    private readonly mstAauRepository: Repository<MstAauEntity>;
 
-    public async getCatalog(
+    public async findCatalog(
         filterDto: FindAllCatalogDto
     ): Promise<PageDto<object>> {
-
-        const queryBuilder = this._catalogEntity.createQueryBuilder();
+        const queryBuilder = this.mstcatalogRepository.createQueryBuilder();
         if (filterDto.vendor) {
             queryBuilder.where("LOWER(vendor) = :vendor", { vendor : filterDto.vendor.toLowerCase() });
         }
@@ -37,5 +39,20 @@ export class CatalogService {
         const pageMetaDto = new PageMetaDto(filterDto.page, filterDto.take, itemCount);
 
         return new PageDto(entities, pageMetaDto);
+    }
+
+    public async findProduct(id: number): Promise<object> {
+        const catalog =  await this.mstcatalogRepository.findOneBy({
+            id: id
+        });
+        const productId = catalog.idDetailProduct
+
+        const product = await this.mstcatalogRepository
+            .createQueryBuilder('a')
+            .leftJoinAndSelect("a.mstAau", "mstAau")
+            .where("a.id = :id", { id: productId })
+            .getOne();
+
+        return product;
     }
 }
