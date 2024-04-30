@@ -19,14 +19,15 @@ export class ProductService {
         filterDto: FindAllCatalogDto
     ): Promise<PageDto<object>> {
         const queryBuilder = this.mstcatalogRepository.createQueryBuilder();
+        
         if (filterDto.vendor) {
-            queryBuilder.where("LOWER(vendor) = :vendor", { vendor : filterDto.vendor.toLowerCase() });
+            queryBuilder.andWhere("LOWER(vendor) = :vendor", { vendor : filterDto.vendor.toLowerCase() });
         }
         if (filterDto.typeRadio) {
-            queryBuilder.where("LOWER(type_radio) = :typeRadio", { typeRadio : filterDto.typeRadio.toLowerCase() });
+            queryBuilder.andWhere("LOWER(type_radio) = :typeRadio", { typeRadio : filterDto.typeRadio.toLowerCase() });
         }
         if (filterDto.productName) {
-            queryBuilder.where("LOWER(product_name) like :productName", { productName : `%${filterDto.productName.toLowerCase()}%` });
+            queryBuilder.andWhere("LOWER(product_name) like :productName", { productName : `%${filterDto.productName.toLowerCase()}%` });
         }
         queryBuilder
             .orderBy('id', filterDto.order)
