@@ -48,10 +48,9 @@ export class ProductService {
         });
         const productId = catalog.idDetailProduct
 
-        const product = await this.mstcatalogRepository
-            .createQueryBuilder('a')
-            .leftJoinAndSelect("a.mstAau", "mstAau")
-            .where("a.id = :id", { id: productId })
+        const product = await this.mstAauRepository
+            .createQueryBuilder()
+            .where("id = :id", { id: productId })
             .getOne();
 
         return product;
