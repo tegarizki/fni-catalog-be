@@ -1,5 +1,4 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { MstAauEntity } from "./mst-aau.entity";
 
 @Entity({name:"mst_catalog", schema:"public"})
 export class MstCatalogEntity{
@@ -18,9 +17,6 @@ export class MstCatalogEntity{
     @Column({ name: 'id_detail_product'})
     idDetailProduct: number;  
 
-    @OneToOne(type => MstAauEntity)
-    @JoinColumn([
-        { name: 'id_detail_product', referencedColumnName: 'id' }
-    ])
-    mstAau: MstAauEntity;
+    @Column({ name: 'image_name'})
+    imageName: string;
 }
