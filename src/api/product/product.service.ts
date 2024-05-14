@@ -2,6 +2,9 @@ import { FindAllCatalogDto } from "@/shared/dto/find-all-catalog.dto";
 import { PageMetaDto } from "@/shared/dto/page-meta.dto";
 import { PageDto } from "@/shared/dto/page.dto";
 import { MstAauEntity } from "@/shared/entity/mst-aau.entity";
+import { MstBbuEntity } from "@/shared/entity/mst-bbu.entity";
+import { MstRruEntity } from "@/shared/entity/mst-rru.entity";
+import { MstSoftwareEntity } from "@/shared/entity/mst-software.entity";
 import { MstCatalogEntity } from "@/shared/entity/mst-catalog.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -14,6 +17,15 @@ export class ProductService {
     
     @InjectRepository(MstAauEntity)
     private readonly mstAauRepository: Repository<MstAauEntity>;
+    
+    @InjectRepository(MstBbuEntity)
+    private readonly mstBbuRepository: Repository<MstBbuEntity>;
+    
+    @InjectRepository(MstRruEntity)
+    private readonly mstRruRepository: Repository<MstRruEntity>;
+    
+    @InjectRepository(MstSoftwareEntity)
+    private readonly mstSoftwareRepository: Repository<MstSoftwareEntity>;
 
     public async findCatalog(
         filterDto: FindAllCatalogDto
@@ -48,11 +60,32 @@ export class ProductService {
         });
         const productId = catalog.idDetailProduct
 
-        const product = await this.mstAauRepository
-            .createQueryBuilder()
-            .where("id = :id", { id: productId })
-            .getOne();
+        let product;
+        if (catalog.typeRadio == 'aau') {
+            product = await this.mstAauRepository
+                .createQueryBuilder()
+                .where("id = :id", { id: productId })
+                .getOne();
+        }
+        if (catalog.typeRadio == 'rru') {
+            product = await this.mstRruRepository
+                .createQueryBuilder()
+                .where("id = :id", { id: productId })
+                .getOne();
+            
+        } else if (catalog.typeRadio == "bbu") {
+            product = await this.mstBbuRepository
+                .createQueryBuilder()
+                .where("id = :id", { id: productId })
+                .getOne();
+        } else if (catalog.typeRadio == "software") {
+            product = await this.mstSoftwareRepository
+                .createQueryBuilder()
+                .where("id = :id", { id: productId })
+                .getOne();
+        }
 
         return product;
+
     }
 }

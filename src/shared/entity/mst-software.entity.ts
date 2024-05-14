@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity({ name: 'mst_software', schema:"public" })
-export class MSTSoftware {
+export class MstSoftwareEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
