@@ -45,6 +45,10 @@ export class CatalogService {
     public async findOne(id: number): Promise<MstCatalogEntity> {
         return await this.repository.findOneBy({ id: id });
     }
+    
+    public async findOneByIdDetail(id: number): Promise<MstCatalogEntity> {
+        return await this.repository.findOneBy({ idDetailProduct: id });
+    }
 
     public async update(id: number, body: MstCatalogEntity): Promise<object> {
         return await this.repository.update(id, body);
