@@ -12,38 +12,38 @@ export class UserController {
     ) {}
 
     @Get("/")
-    private findAll(
-        @Query() dto: FindAllUserDto,
+    private async findAll(
+        @Query() filter: FindAllUserDto,
     ): Promise<PageDto<object>> {
-        return null;
+        return await this.userService.findAll(filter);
     }
 
     @Get(":id")
-    private findById(
+    private async findById(
         @Param('id') id: number
     ): Promise<object> {
-        return null;
+        return await this.findById(id);
     }
 
     @Post()
-    private create(
+    private async create(
         @Body() user: MstUserEntity
     ): Promise<object> {
-        return null;
+        return await this.create(user);
     }
 
     @Put(":id")
-    private update(
+    private async update(
         @Param('id') id: number,
         @Body() user: MstUserEntity
     ): Promise<object> {
-        return null;
+        return await this.update(id, user);
     }
 
     @Delete(":id")
-    private delete(
+    private async delete(
         @Param('id') id: number
     ): Promise<object> {
-        return null;
+        return await this.delete(id);
     }
 }
