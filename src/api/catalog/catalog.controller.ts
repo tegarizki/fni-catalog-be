@@ -400,7 +400,19 @@ export class CatalogController {
     }
 
     @Delete(":id")
-    private delete( @Param('id') id: number ): Promise<object> {
-        return null;
+    private async delete( @Param('id') id: number ) {
+        const catalog = await this.catalogService.findOneByIdDetail(id);
+        
+        if (catalog.typeRadio == 'aau') {
+            await this.aauService.remove(id);
+        } else if (catalog.typeRadio == 'rru') {
+            await this.rruService.remove(id);
+        } else if (catalog.typeRadio == "bbu") {
+            await this.bbuService.remove(id);
+        } else if (catalog.typeRadio == "software") {
+            await this.softwareService.remove(id);
+        }
+
+        return this.catalogService.remove(id);
     }
 }
