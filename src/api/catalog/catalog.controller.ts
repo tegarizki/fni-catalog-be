@@ -401,16 +401,17 @@ export class CatalogController {
 
     @Delete(":id")
     private async delete( @Param('id') id: number ) {
-        const catalog = await this.catalogService.findOneByIdDetail(id);
+        const catalog = await this.catalogService.findOne(id);
         
+        console.log(catalog);
         if (catalog.typeRadio == 'aau') {
-            await this.aauService.remove(id);
+            await this.aauService.remove(catalog.idDetailProduct);
         } else if (catalog.typeRadio == 'rru') {
-            await this.rruService.remove(id);
+            await this.rruService.remove(catalog.idDetailProduct);
         } else if (catalog.typeRadio == "bbu") {
-            await this.bbuService.remove(id);
+            await this.bbuService.remove(catalog.idDetailProduct);
         } else if (catalog.typeRadio == "software") {
-            await this.softwareService.remove(id);
+            await this.softwareService.remove(catalog.idDetailProduct);
         }
 
         return this.catalogService.remove(id);

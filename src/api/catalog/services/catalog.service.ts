@@ -55,7 +55,7 @@ export class CatalogService {
     }
 
     public async remove(id: number): Promise<object> {
-        return await this.repository.delete({ idDetailProduct : id });
+        return await this.repository.delete({ id : id });
     }
     public async create(body: MstCatalogEntity): Promise<MstCatalogEntity> {
         return await this.repository.save(body);
