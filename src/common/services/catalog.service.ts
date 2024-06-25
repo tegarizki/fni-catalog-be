@@ -1,19 +1,19 @@
-import { FindAllCatalogDto } from "@/shared/dto/find-all-catalog.dto";
-import { PageMetaDto } from "@/shared/dto/page-meta.dto";
-import { PageDto } from "@/shared/dto/page.dto";
-import { MstAauEntity } from "@/shared/entity/mst-aau.entity";
-import { MstBbuEntity } from "@/shared/entity/mst-bbu.entity";
-import { MstRruEntity } from "@/shared/entity/mst-rru.entity";
-import { MstSoftwareEntity } from "@/shared/entity/mst-software.entity";
-import { MstCatalogEntity } from "@/shared/entity/mst-catalog.entity";
+import { FindAllCatalogDto } from "@/common/dto/find-all-catalog.dto";
+import { PageMetaDto } from "@/common/dto/page-meta.dto";
+import { PageDto } from "@/common/dto/page.dto";
+import { AauEntity } from "@/common/entity/aau.entity";
+import { BbuEntity } from "@/common/entity/bbu.entity";
+import { RruEntity } from "@/common/entity/rru.entity";
+import { SoftwareEntity } from "@/common/entity/software.entity";
+import { CatalogEntity } from "@/common/entity/catalog.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 @Injectable()
 export class CatalogService {
-    @InjectRepository(MstCatalogEntity)
-    private readonly repository: Repository<MstCatalogEntity>;
+    @InjectRepository(CatalogEntity)
+    private readonly repository: Repository<CatalogEntity>;
 
     public async findAll(
         filterDto: FindAllCatalogDto
@@ -42,22 +42,22 @@ export class CatalogService {
         return new PageDto(entities, pageMetaDto);
     }
 
-    public async findOne(id: number): Promise<MstCatalogEntity> {
+    public async findOne(id: number): Promise<CatalogEntity> {
         return await this.repository.findOneBy({ id: id });
     }
     
-    public async findOneByIdDetail(id: number): Promise<MstCatalogEntity> {
+    public async findOneByIdDetail(id: number): Promise<CatalogEntity> {
         return await this.repository.findOneBy({ idDetailProduct: id });
     }
 
-    public async update(id: number, body: MstCatalogEntity): Promise<object> {
+    public async update(id: number, body: CatalogEntity): Promise<object> {
         return await this.repository.update(id, body);
     }
 
     public async remove(id: number): Promise<object> {
         return await this.repository.delete({ id : id });
     }
-    public async create(body: MstCatalogEntity): Promise<MstCatalogEntity> {
+    public async create(body: CatalogEntity): Promise<CatalogEntity> {
         return await this.repository.save(body);
     }
 }

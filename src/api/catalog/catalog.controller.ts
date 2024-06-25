@@ -1,25 +1,26 @@
 import { JwtAuthGuard } from "@/common/guard/auth.guard";
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
-import { FindAllCatalogDto } from "@/shared/dto/find-all-catalog.dto";
-import { PageDto } from "@/shared/dto/page.dto";
-import { CatalogService } from "./services/catalog.service";
-import { AauService } from "./services/aau.service";
-import { BbuService } from "./services/bbu.service";
-import { RruService } from "./services/rru.service";
-import { SoftwareService } from "./services/software.service";
+import { FindAllCatalogDto } from "@/common/dto/find-all-catalog.dto";
+import { PageDto } from "@/common/dto/page.dto";
+import { CatalogService } from "@/common/services/catalog.service";
+import { AauService } from "@/common/services/aau.service";
+import { BbuService } from "@/common/services/bbu.service";
+import { RruService } from "@/common/services/rru.service";
+import { SoftwareService } from "@/common/services/software.service";
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import * as multer from 'multer';
 import * as fs from 'fs';
 import * as path from 'path';
-import { MstAauEntity } from "@/shared/entity/mst-aau.entity";
-import { MstCatalogEntity } from "@/shared/entity/mst-catalog.entity";
-import { MstRruEntity } from "@/shared/entity/mst-rru.entity";
-import { run } from "node:test";
-import { MstBbuEntity } from "@/shared/entity/mst-bbu.entity";
-import { MstSoftwareEntity } from "@/shared/entity/mst-software.entity";
+import { AauEntity } from "@/common/entity/aau.entity";
+import { CatalogEntity } from "@/common/entity/catalog.entity";
+import { RruEntity } from "@/common/entity/rru.entity";
+import { BbuEntity } from "@/common/entity/bbu.entity";
+import { SoftwareEntity } from "@/common/entity/software.entity";
 import { Repository } from "typeorm";
+import 'multer';
+import { ApiTags } from "@nestjs/swagger";
 
 @Controller('catalog')
+@ApiTags('catalog')
 @UseGuards(JwtAuthGuard)
 export class CatalogController {
     constructor(
@@ -120,7 +121,7 @@ export class CatalogController {
 
         let id;
         if (body.typeRadio == 'aau') {
-            const aau = new MstAauEntity();
+            const aau = new AauEntity();
             aau.vendor = body.vendor;
             aau.product = body.product;
             aau.category = body.category;
@@ -152,7 +153,7 @@ export class CatalogController {
             const newAau = await this.aauService.create(aau);
             id = newAau.id;
         } else if (body.typeRadio == 'rru') {
-            const rru = new MstRruEntity();
+            const rru = new RruEntity();
             rru.vendor = body.vendor;
             rru.product = body.product;
             rru.category = body.category;
@@ -183,7 +184,7 @@ export class CatalogController {
             const newRru = await this.rruService.create(rru);
             id = newRru.id;
         } else if (body.typeRadio == "bbu") {
-            const bbu = new MstBbuEntity();
+            const bbu = new BbuEntity();
             bbu.vendor = body.vendor;
             bbu.product = body.product;
             bbu.type = body.type;
@@ -206,7 +207,7 @@ export class CatalogController {
             const newBbu = await this.bbuService.create(bbu);
             id = newBbu.id;
         } else if (body.typeRadio == "software") {
-            const software = new MstSoftwareEntity();
+            const software = new SoftwareEntity();
             software.vendor = body.vendor;
             software.product = body.product;
             software.description = body.description;
@@ -227,7 +228,7 @@ export class CatalogController {
             id = newSoftware.id;
         }
 
-        const catalog = new MstCatalogEntity();
+        const catalog = new CatalogEntity();
         catalog.productName = body.product;
         catalog.vendor = body.vendor;
         catalog.typeRadio = body.typeRadio;
@@ -285,7 +286,7 @@ export class CatalogController {
         }
 
         if (body.typeRadio == 'aau') {
-            const aau = new MstAauEntity();
+            const aau = new AauEntity();
             aau.vendor = body.vendor;
             aau.product = body.product;
             aau.category = body.category;
@@ -316,7 +317,7 @@ export class CatalogController {
 
             await this.aauService.update(body.id, aau);
         } else if (body.typeRadio == 'rru') {
-            const rru = new MstRruEntity();
+            const rru = new RruEntity();
             rru.vendor = body.vendor;
             rru.product = body.product;
             rru.category = body.category;
@@ -346,7 +347,7 @@ export class CatalogController {
 
             await this.rruService.update(body.id, rru);
         } else if (body.typeRadio == "bbu") {
-            const bbu = new MstBbuEntity();
+            const bbu = new BbuEntity();
             bbu.vendor = body.vendor;
             bbu.product = body.product;
             bbu.type = body.type;
@@ -368,7 +369,7 @@ export class CatalogController {
 
             await this.bbuService.update(body.id,bbu);
         } else if (body.typeRadio == "software") {
-            const software = new MstSoftwareEntity();
+            const software = new SoftwareEntity();
             software.vendor = body.vendor;
             software.product = body.product;
             software.description = body.description;
@@ -389,7 +390,7 @@ export class CatalogController {
         }
 
         const oldCatalog = await this.catalogService.findOneByIdDetail(body.id);
-        const catalog = new MstCatalogEntity();
+        const catalog = new CatalogEntity();
         catalog.productName = body.product;
         catalog.vendor = body.vendor;
         catalog.typeRadio = body.typeRadio;
@@ -403,7 +404,6 @@ export class CatalogController {
     private async delete( @Param('id') id: number ) {
         const catalog = await this.catalogService.findOne(id);
         
-        console.log(catalog);
         if (catalog.typeRadio == 'aau') {
             await this.aauService.remove(catalog.idDetailProduct);
         } else if (catalog.typeRadio == 'rru') {

@@ -1,22 +1,22 @@
-import { MstBbuEntity } from "@/shared/entity/mst-bbu.entity";
+import { RruEntity } from "@/common/entity/rru.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 @Injectable()
-export class BbuService {
-    @InjectRepository(MstBbuEntity)
-    private readonly repository: Repository<MstBbuEntity>;
+export class RruService {
+    @InjectRepository(RruEntity)
+    private readonly repository: Repository<RruEntity>;
 
-    public async create(body: MstBbuEntity): Promise<MstBbuEntity> {
+    public async create(body: RruEntity): Promise<RruEntity> {
         return await this.repository.save(body);
     }
 
-    public async findOne(id: number): Promise<MstBbuEntity> {
+    public async findOne(id: number): Promise<RruEntity> {
         return await this.repository.findOneBy({ id });
     }
 
-    public async update(id: number, body: MstBbuEntity): Promise<object> {
+    public async update(id: number, body: RruEntity): Promise<object> {
         return await this.repository.update(id, body);
     }
 

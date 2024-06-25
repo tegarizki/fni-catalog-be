@@ -1,8 +1,10 @@
 import { Body, Controller, Post, ClassSerializerInterceptor, UseInterceptors, Inject } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { RegisterDto } from '@/shared/dto/register.dto';
-import { LoginDto } from '@/shared/dto/login.dto';
+import { AuthService } from '@/common/services/auth.service';
+import { RegisterDto } from '@/common/dto/register.dto';
+import { LoginDto } from '@/common/dto/login.dto';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   @Inject(AuthService)
@@ -15,6 +17,7 @@ export class AuthController {
   }
 
   @Post('sign-in')
+  @ApiBody({ type: LoginDto })
   private login(@Body() body: LoginDto): Promise<object> {
     return this.service.login(body);
   }

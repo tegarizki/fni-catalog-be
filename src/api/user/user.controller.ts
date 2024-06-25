@@ -1,11 +1,15 @@
 
-import { Body, Controller, Delete, Get, Param, Post, Put, Query} from '@nestjs/common';
-import { UserService } from './user.service';
-import { PageDto } from '@/shared/dto/page.dto';
-import { FindAllUserDto } from '@/shared/dto/find-all-user.dto';
-import { MstUserEntity } from '@/shared/entity/mst-user.entity';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards} from '@nestjs/common';
+import { UserService } from '@/common/services/user.service';
+import { PageDto } from '@/common/dto/page.dto';
+import { FindAllUserDto } from '@/common/dto/find-all-user.dto';
+import { UserEntity } from '@/common/entity/user.entity';
+import { JwtAuthGuard } from '@/common/guard/auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('user')
 @Controller('user')
+@UseGuards(JwtAuthGuard)
 export class UserController {
     constructor(
         private readonly userService: UserService
@@ -27,7 +31,7 @@ export class UserController {
 
     @Post()
     private async create(
-        @Body() user: MstUserEntity
+        @Body() user: UserEntity
     ): Promise<object> {
         return await this.create(user);
     }
@@ -35,7 +39,7 @@ export class UserController {
     @Put(":id")
     private async update(
         @Param('id') id: number,
-        @Body() user: MstUserEntity
+        @Body() user: UserEntity
     ): Promise<object> {
         return await this.update(id, user);
     }

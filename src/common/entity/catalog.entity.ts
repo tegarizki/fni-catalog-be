@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name:"mst_catalog", schema:"public"})
-export class MstCatalogEntity{
+export class CatalogEntity{
     @PrimaryGeneratedColumn()
     id: number;
 

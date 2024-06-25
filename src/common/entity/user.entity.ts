@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { Exclude } from "class-transformer";
 
 @Entity({name:'mst_users', schema:'public'})
-export class MstUserEntity {
+export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -1,8 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
-import { MstCatalogEntity } from './mst-catalog.entity';
 
 @Entity({ name: 'mst_aau', schema:"public" })
-export class MstAauEntity {
+export class AauEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

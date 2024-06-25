@@ -8,6 +8,7 @@ import { AuthModule } from './api/auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { CatalogModule } from './api/catalog/catalog.module';
+import { OptionModule } from './api/option/option.module';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
 
@@ -21,7 +22,8 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
     TypeOrmModule.forRootAsync({useClass: TypeOrmConfigService}),
     AuthModule,
     UserModule,
-    CatalogModule
+    CatalogModule,
+    OptionModule
   ],
   controllers: [],
   providers: [],

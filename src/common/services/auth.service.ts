@@ -1,10 +1,10 @@
 import { ConflictException, HttpException, HttpStatus, Inject, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
-import { MstUserEntity } from '@/shared/entity/mst-user.entity';
+import { UserEntity } from '@/common/entity/user.entity';
 import { AuthHelper } from '@/common/helper/auth.helper';
-import { UserService } from '../user/user.service';
+import { UserService } from '@/common/services/user.service';
 import  responses  from "@/common/helper/responses.helper";
-import { LoginDto } from '@/shared/dto/login.dto';
-import { RegisterDto } from '@/shared/dto/register.dto';
+import { LoginDto } from '@/common/dto/login.dto';
+import { RegisterDto } from '@/common/dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -36,7 +36,7 @@ export class AuthService {
 
   public async login(body: LoginDto): Promise<object> {
     const { username, password }: LoginDto = body;
-    const user: MstUserEntity = await this.userService.findByUsername(username);
+    const user: UserEntity = await this.userService.findByUsername(username);
 
     if (!user) {
       throw new NotFoundException(

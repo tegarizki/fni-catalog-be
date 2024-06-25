@@ -1,25 +1,25 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { MstUserEntity } from '@/shared/entity/mst-user.entity';
-import { RegisterDto } from '@/shared/dto/register.dto';
+import { UserEntity } from '@/common/entity/user.entity';
+import { RegisterDto } from '@/common/dto/register.dto';
 import { AuthHelper } from '@/common/helper/auth.helper';
-import { FindAllUserDto } from '@/shared/dto/find-all-user.dto';
-import { PageDto } from '@/shared/dto/page.dto';
-import { PageMetaDto } from '@/shared/dto/page-meta.dto';
+import { FindAllUserDto } from '@/common/dto/find-all-user.dto';
+import { PageDto } from '@/common/dto/page.dto';
+import { PageMetaDto } from '@/common/dto/page-meta.dto';
 
 @Injectable()
 export class UserService {
-    @InjectRepository(MstUserEntity)
-    private readonly repository: Repository<MstUserEntity>;
+    @InjectRepository(UserEntity)
+    private readonly repository: Repository<UserEntity>;
 
     @Inject(AuthHelper)
     private readonly helper: AuthHelper;
 
-    public async create(body: RegisterDto): Promise<MstUserEntity | never> {
+    public async create(body: RegisterDto): Promise<UserEntity | never> {
         const { username, password,role,status, fullName, phone, email }: RegisterDto = body;
 
-        let user = new MstUserEntity();
+        let user = new UserEntity();
         user.fullName = fullName;
         user.username = username;
         user.password = this.helper.encodePassword(password);
@@ -32,13 +32,13 @@ export class UserService {
         
     }
 
-    public async findByUsername(username: string): Promise<MstUserEntity | never> {
-        let res: MstUserEntity = await this.repository.findOne({ where: { username } });
+    public async findByUsername(username: string): Promise<UserEntity | never> {
+        let res: UserEntity = await this.repository.findOne({ where: { username } });
 
         return res;
     }
 
-    public async updateLastLogin(id: number): Promise<MstUserEntity | never> {
+    public async updateLastLogin(id: number): Promise<UserEntity | never> {
         const update = await this.repository.update(id, { lastLoginAt: new Date() });
         if (update.affected === 0) {
             throw new Error("User not found");
@@ -68,11 +68,11 @@ export class UserService {
         return new PageDto(entities, pageMetaDto);
     }
 
-    public async findOne(id: number): Promise<MstUserEntity> {
+    public async findOne(id: number): Promise<UserEntity> {
         return await this.repository.findOneBy({ id });
     }
 
-    public async update(id: number, user: MstUserEntity): Promise<object> {
+    public async update(id: number, user: UserEntity): Promise<object> {
         return await this.repository.update(id, user);
     }
 

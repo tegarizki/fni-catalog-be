@@ -3,13 +3,13 @@ import { Injectable, HttpException, HttpStatus, UnauthorizedException } from '@n
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { MstUserEntity } from '@/shared/entity/mst-user.entity';
+import { UserEntity } from '@/common/entity/user.entity';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthHelper {
-  @InjectRepository(MstUserEntity)
-  private readonly repository: Repository<MstUserEntity>;
+  @InjectRepository(UserEntity)
+  private readonly repository: Repository<UserEntity>;
 
   private readonly jwt: JwtService;
 
@@ -23,12 +23,12 @@ export class AuthHelper {
   }
 
   // Get User by User ID we get from decode()
-  public async validateUser(decoded: any): Promise<MstUserEntity> {
+  public async validateUser(decoded: any): Promise<UserEntity> {
     return this.repository.findOne({ where : {id : decoded.id}});
   }
 
   // Generate JWT Token
-  public generateToken(user: MstUserEntity): string {
+  public generateToken(user: UserEntity): string {
     return this.jwt.sign({ id: user.id, username: user.username });
   }
 
@@ -52,7 +52,7 @@ export class AuthHelper {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
 
-    const user: MstUserEntity = await this.validateUser(decoded);
+    const user: UserEntity = await this.validateUser(decoded);
 
     if (!user) {
       throw new UnauthorizedException();

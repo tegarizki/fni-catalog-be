@@ -1,11 +1,11 @@
 import { Injectable, ExecutionContext } from '@nestjs/common';
 import { AuthGuard, IAuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
-import { MstUserEntity } from '@/shared/entity/mst-user.entity';
+import { UserEntity } from '@/common/entity/user.entity';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') implements IAuthGuard {
-  public handleRequest(err: unknown, user: MstUserEntity): any {
+  public handleRequest(err: unknown, user: UserEntity): any {
     return user;
   }
 

@@ -1,23 +1,22 @@
-
-import { MstSoftwareEntity } from "@/shared/entity/mst-software.entity";
+import { AauEntity } from "@/common/entity/aau.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 @Injectable()
-export class SoftwareService {
-    @InjectRepository(MstSoftwareEntity)
-    private readonly repository: Repository<MstSoftwareEntity>;
+export class AauService {
+    @InjectRepository(AauEntity)
+    private readonly repository: Repository<AauEntity>;
 
-    public async create(body: MstSoftwareEntity): Promise<MstSoftwareEntity> {
+    public async create(body: AauEntity): Promise<AauEntity> {
         return await this.repository.save(body);
     }
 
-    public async findOne(id: number): Promise<MstSoftwareEntity> {
+    public async findOne(id: number): Promise<AauEntity> {
         return await this.repository.findOneBy({ id });
     }
 
-    public async update(id: number, body: MstSoftwareEntity): Promise<object> {
+    public async update(id: number, body: AauEntity): Promise<object> {
         return await this.repository.update(id, body);
     }
 
