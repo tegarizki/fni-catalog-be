@@ -1,12 +1,9 @@
-
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards} from '@nestjs/common';
 import { VendorService } from '@/common/services/vendor.service';
 import { TypeRadioService } from '@/common/services/type-radio.service';
 import { JwtAuthGuard } from '@/common/guard/auth.guard';
-import { ApiTags } from '@nestjs/swagger';
 
 @Controller('option')
-@ApiTags('option')
 @UseGuards(JwtAuthGuard)
 export class OptionController {
     constructor(

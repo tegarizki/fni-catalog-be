@@ -5,9 +5,7 @@ import { PageDto } from '@/common/dto/page.dto';
 import { FindAllUserDto } from '@/common/dto/find-all-user.dto';
 import { UserEntity } from '@/common/entity/user.entity';
 import { JwtAuthGuard } from '@/common/guard/auth.guard';
-import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('user')
 @Controller('user')
 @UseGuards(JwtAuthGuard)
 export class UserController {
