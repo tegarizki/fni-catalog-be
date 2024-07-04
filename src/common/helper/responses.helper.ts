@@ -1,11 +1,11 @@
 
 function Responses(
-  statusCode: number,
+  status: string,
   message: string,
   data = {},
 ): (object) {
   return {
-    statusCode: statusCode,
+    status: status,
     message: message,
     data: data,
   };

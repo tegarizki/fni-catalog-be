@@ -6,7 +6,6 @@ import { ConfigService } from '@nestjs/config';
 import { UserEntity } from '@/common/entity/user.entity';
 import { AuthController } from './auth.controller';
 import { AuthHelper } from '@/common/helper/auth.helper';
-import { AuthService } from '@/common/services/auth.service';
 import { JwtStrategy } from '@/common/strategy/jwt.strategy';
 import { UserService } from '@/common/services/user.service';
 import { UserModule } from '@/api/user/user.module';
@@ -25,6 +24,6 @@ import { UserModule } from '@/api/user/user.module';
     UserModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthHelper, JwtStrategy, UserService],
+  providers: [AuthHelper, JwtStrategy, UserService],
 })
 export class AuthModule {}
