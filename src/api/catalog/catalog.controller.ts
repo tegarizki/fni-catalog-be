@@ -38,7 +38,7 @@ export class CatalogController {
                 throw new Error("No Data Found");
             }
 
-            return Responses("success", "Ok", {});
+            return Responses("success", "Ok", data);
         } catch (err) {
             Logger.log("Error encountered: ", err);
             return Responses("failed", err);
@@ -341,7 +341,7 @@ export class CatalogController {
                 aau.documentName = fileFNI;
                 aau.documentTechnicalName = fileTechnical;
 
-                await this.aauService.update(body.id, aau);
+                await this.aauService.update(Number(body.id), aau);
             } else if (body.typeRadio == 'rru') {
                 const rru = new RruEntity();
                 rru.vendor = body.vendor;
@@ -371,7 +371,7 @@ export class CatalogController {
                 rru.documentName = fileFNI;
                 rru.documentTechnicalName = fileTechnical;
 
-                await this.rruService.update(body.id, rru);
+                await this.rruService.update(Number(body.id), rru);
             } else if (body.typeRadio == "bbu") {
                 const bbu = new BbuEntity();
                 bbu.vendor = body.vendor;
@@ -393,7 +393,7 @@ export class CatalogController {
                 bbu.documentName = fileFNI;
                 bbu.documentTechnicalName = fileTechnical;
 
-                await this.bbuService.update(body.id,bbu);
+                await this.bbuService.update(Number(body.id),bbu);
             } else if (body.typeRadio == "software") {
                 const software = new SoftwareEntity();
                 software.vendor = body.vendor;
@@ -412,23 +412,23 @@ export class CatalogController {
                 software.documentName = fileFNI;
                 software.documentTechnicalName = fileTechnical;
 
-                await this.softwareService.update(body.id,software);
+                await this.softwareService.update(Number(body.id),software);
             }
 
-            const oldCatalog = await this.catalogService.findOneByIdDetail(body.id);
+            const oldCatalog = await this.catalogService.findOneByIdDetail(Number(body.id));
             const catalog = new CatalogEntity();
             catalog.productName = body.product;
             catalog.vendor = body.vendor;
             catalog.typeRadio = body.typeRadio;
-            catalog.idDetailProduct = body.id;
+            catalog.idDetailProduct = Number(body.id);
             catalog.imageName = image;
-
+            
             await this.catalogService.update(oldCatalog.id, catalog);
 
             return Responses("success", "Ok", null);
         } catch (err) {
             Logger.log("Error encountered: ", err);
-            return Responses("failed", err);
+            return Responses("failed", err, null);
         }
     }
 
