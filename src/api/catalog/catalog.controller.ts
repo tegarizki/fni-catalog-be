@@ -1,5 +1,5 @@
 import { JwtAuthGuard } from "@/common/guard/auth.guard";
-import { Body, Controller, Delete, Get, Logger, Param, Post, Put, Query, Response, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Logger, NotFoundException, Param, Post, Put, Query, Response, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
 import { FindAllCatalogDto } from "@/common/dto/find-all-catalog.dto";
 import { PageDto } from "@/common/dto/page.dto";
 import { CatalogService } from "@/common/services/catalog.service";
@@ -41,7 +41,7 @@ export class CatalogController {
             return Responses("success", "Ok", data);
         } catch (err) {
             Logger.log("Error encountered: ", err);
-            return Responses("failed", err);
+            return Responses("failed", err.message, null);
         }
     }
     
@@ -61,7 +61,7 @@ export class CatalogController {
             }
         } catch (err) {
             Logger.log("Error encountered: ", err);
-            return Responses("failed", err);
+            return Responses("failed", err.message, null);
         }
     }
 
@@ -86,7 +86,7 @@ export class CatalogController {
             return Responses("success", "Ok", product);
         } catch (err) {
             Logger.log("Error encountered: ", err);
-            return Responses("failed", err);
+            return Responses("failed", err.message, null);
         }
     }
 
@@ -259,7 +259,7 @@ export class CatalogController {
             return Responses("success", "Ok", null);
         } catch (err) {
             Logger.log("Error encountered: ", err);
-            return Responses("failed", err);
+            return Responses("failed", err.message, null);
         }
     }
 
@@ -311,6 +311,11 @@ export class CatalogController {
                 image = imagePath;
             }
 
+            const existingCatalog = await this.catalogService.findOne(Number(body.id));
+            if(existingCatalog == null) {
+                throw new NotFoundException("Catalog not found");
+            }
+
             if (body.typeRadio == 'aau') {
                 const aau = new AauEntity();
                 aau.vendor = body.vendor;
@@ -341,7 +346,7 @@ export class CatalogController {
                 aau.documentName = fileFNI;
                 aau.documentTechnicalName = fileTechnical;
 
-                await this.aauService.update(Number(body.id), aau);
+                await this.aauService.update(existingCatalog.id, aau);
             } else if (body.typeRadio == 'rru') {
                 const rru = new RruEntity();
                 rru.vendor = body.vendor;
@@ -371,7 +376,7 @@ export class CatalogController {
                 rru.documentName = fileFNI;
                 rru.documentTechnicalName = fileTechnical;
 
-                await this.rruService.update(Number(body.id), rru);
+                await this.rruService.update(existingCatalog.id, rru);
             } else if (body.typeRadio == "bbu") {
                 const bbu = new BbuEntity();
                 bbu.vendor = body.vendor;
@@ -393,7 +398,7 @@ export class CatalogController {
                 bbu.documentName = fileFNI;
                 bbu.documentTechnicalName = fileTechnical;
 
-                await this.bbuService.update(Number(body.id),bbu);
+                await this.bbuService.update(existingCatalog.id,bbu);
             } else if (body.typeRadio == "software") {
                 const software = new SoftwareEntity();
                 software.vendor = body.vendor;
@@ -412,23 +417,22 @@ export class CatalogController {
                 software.documentName = fileFNI;
                 software.documentTechnicalName = fileTechnical;
 
-                await this.softwareService.update(Number(body.id),software);
+                await this.softwareService.update(existingCatalog.id,software);
             }
 
-            const oldCatalog = await this.catalogService.findOneByIdDetail(Number(body.id));
             const catalog = new CatalogEntity();
             catalog.productName = body.product;
             catalog.vendor = body.vendor;
             catalog.typeRadio = body.typeRadio;
-            catalog.idDetailProduct = Number(body.id);
+            catalog.idDetailProduct = existingCatalog.id;
             catalog.imageName = image;
-            
-            await this.catalogService.update(oldCatalog.id, catalog);
+
+            await this.catalogService.update(existingCatalog.id, catalog);
 
             return Responses("success", "Ok", null);
         } catch (err) {
             Logger.log("Error encountered: ", err);
-            return Responses("failed", err, null);
+            return Responses("failed", err.message, null);
         }
     }
 
@@ -452,7 +456,7 @@ export class CatalogController {
             return Responses("success", "Ok", null);
         } catch (err) {
             Logger.log("Error encountered: ", err);
-            return Responses("failed", err);
+            return Responses("failed", err.message, null);
         }
     }
 }

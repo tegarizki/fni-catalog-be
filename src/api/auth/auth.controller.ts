@@ -29,9 +29,7 @@ export class AuthController {
       return Responses("success","Create user successfullly",null);
     } catch (err) {
       Logger.log("Error encountered: ", err);
-      throw new InternalServerErrorException(
-        Responses("failed", err),
-      )
+      return Responses("failed", err.message, null);
     }
   }
 
@@ -55,9 +53,7 @@ export class AuthController {
       return Responses("success","Ok",this.helper.generateToken(user));
     } catch (err) {
       Logger.log("Error encountered: ", err);
-      throw new InternalServerErrorException(
-        Responses("failed", err),
-      )
+      return Responses("failed", err.message, null);
     }
   }
 }

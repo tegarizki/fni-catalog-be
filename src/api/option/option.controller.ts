@@ -26,9 +26,7 @@ export class OptionController {
             }
         } catch (err) {
             Logger.log("Error encountered: ", err);
-            throw new InternalServerErrorException(
-            Responses("failed", err),
-            )
+            return Responses("failed", err.message, null);
         }
     }
 }
