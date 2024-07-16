@@ -30,16 +30,16 @@ export class AauEntity {
   supportSDR: string;
 
   @Column({ name: 'ibw_mhz', nullable: true })
-  ibwMHz: number;
+  ibwMHz: string;
 
   @Column({ nullable: true })
   mimo: string;
 
   @Column({ name: 'pa_output_power', nullable: true })
-  paOutputPower: number;
+  paOutputPower: string;
 
   @Column({ name: 'power_consumption', nullable: true })
-  powerConsumption: number;
+  powerConsumption: string;
 
   @Column({ nullable: true })
   weight: string;
@@ -72,10 +72,10 @@ export class AauEntity {
   typicalBWTransport: string;
 
   @Column({ nullable: true })
-  ga: number;
+  ga: string;
 
   @Column({ nullable: true })
-  eos: number;
+  eos: string;
 
   @Column({ name: 'image_name'})
   imageName: string;

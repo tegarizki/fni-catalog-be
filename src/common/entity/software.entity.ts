@@ -36,10 +36,10 @@ export class SoftwareEntity {
   numDeleteCounter: string;
 
   @Column({ nullable: true })
-  ga: number;
+  ga: string;
 
   @Column({ nullable: true })
-  eos: number;
+  eos: string;
 
   @Column({ name: 'image_name'})
   imageName: string;

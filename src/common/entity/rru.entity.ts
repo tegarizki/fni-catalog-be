@@ -66,13 +66,13 @@ export class RruEntity {
   recommendedCBRating: string;
 
   @Column({ name: 'typical_bw_transport', nullable: true })
-  typicalBWTransport: number;
+  typicalBWTransport: string;
 
   @Column({ nullable: true })
-  ga: number;
+  ga: string;
 
   @Column({ nullable: true })
-  eos: number;
+  eos: string;
 
   @Column({ name: 'image_name'})
   imageName: string;
