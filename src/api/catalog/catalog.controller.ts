@@ -311,13 +311,13 @@ export class CatalogController {
                 image = imagePath;
             }
 
-            const existingCatalog = await this.catalogService.findOne(Number(body.id));
-            if(existingCatalog == null) {
+            const catalog = await this.catalogService.findOne(Number(body.id));
+            if(catalog == null) {
                 throw new NotFoundException("Catalog not found");
             }
 
             if (body.typeRadio == 'aau') {
-                const aau = new AauEntity();
+                const aau = await this.aauService.findOne(catalog.idDetailProduct);
                 aau.vendor = body.vendor;
                 aau.product = body.product;
                 aau.category = body.category;
@@ -346,9 +346,9 @@ export class CatalogController {
                 aau.documentName = fileFNI;
                 aau.documentTechnicalName = fileTechnical;
 
-                await this.aauService.update(existingCatalog.id, aau);
+                await this.aauService.update(aau.id, aau);
             } else if (body.typeRadio == 'rru') {
-                const rru = new RruEntity();
+                const rru = await this.rruService.findOne(catalog.idDetailProduct);
                 rru.vendor = body.vendor;
                 rru.product = body.product;
                 rru.category = body.category;
@@ -376,9 +376,9 @@ export class CatalogController {
                 rru.documentName = fileFNI;
                 rru.documentTechnicalName = fileTechnical;
 
-                await this.rruService.update(existingCatalog.id, rru);
+                await this.rruService.update(rru.id, rru);
             } else if (body.typeRadio == "bbu") {
-                const bbu = new BbuEntity();
+                const bbu = await this.bbuService.findOne(catalog.idDetailProduct);
                 bbu.vendor = body.vendor;
                 bbu.product = body.product;
                 bbu.type = body.type;
@@ -398,9 +398,9 @@ export class CatalogController {
                 bbu.documentName = fileFNI;
                 bbu.documentTechnicalName = fileTechnical;
 
-                await this.bbuService.update(existingCatalog.id,bbu);
+                await this.bbuService.update(bbu.id,bbu);
             } else if (body.typeRadio == "software") {
-                const software = new SoftwareEntity();
+                const software = await this.softwareService.findOne(catalog.idDetailProduct);
                 software.vendor = body.vendor;
                 software.product = body.product;
                 software.description = body.description;
@@ -417,17 +417,14 @@ export class CatalogController {
                 software.documentName = fileFNI;
                 software.documentTechnicalName = fileTechnical;
 
-                await this.softwareService.update(existingCatalog.id,software);
+                await this.softwareService.update(software.id,software);
             }
 
-            const catalog = new CatalogEntity();
             catalog.productName = body.product;
             catalog.vendor = body.vendor;
             catalog.typeRadio = body.typeRadio;
-            catalog.idDetailProduct = existingCatalog.id;
             catalog.imageName = image;
-
-            await this.catalogService.update(existingCatalog.id, catalog);
+            await this.catalogService.update(catalog.id, catalog);
 
             return Responses("success", "Ok", null);
         } catch (err) {
