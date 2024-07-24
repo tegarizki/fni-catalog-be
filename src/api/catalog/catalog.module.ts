@@ -12,7 +12,7 @@ import { AauService } from '@/common/services/aau.service';
 import { BbuService } from '@/common/services/bbu.service';
 import { RruService } from '@/common/services/rru.service';
 import { SoftwareService } from '@/common/services/software.service';
-import { AntennaEntity } from '@/common/entity/atenna.entity';
+import { AntennaEntity } from '@/common/entity/antenna.entity';
 import { AntennaService } from '@/common/services/antenna.service';
 
 @Module({

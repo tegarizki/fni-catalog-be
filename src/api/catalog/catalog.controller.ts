@@ -19,7 +19,7 @@ import { Repository } from "typeorm";
 import 'multer';
 import Responses from "@/common/helper/responses.helper";
 import { AntennaService } from "@/common/services/antenna.service";
-import { AntennaEntity } from "@/common/entity/atenna.entity";
+import { AntennaEntity } from "@/common/entity/antenna.entity";
 
 @Controller('catalog')
 @UseGuards(JwtAuthGuard)
@@ -84,7 +84,7 @@ export class CatalogController {
                 product = await this.bbuService.findOne(catalog.idDetailProduct);
             } else if (catalog.typeRadio == "software") {
                 product = await this.softwareService.findOne(catalog.idDetailProduct);
-            } else if (catalog.typeRadio == "atenna") {
+            } else if (catalog.typeRadio == "antenna") {
                 product = await this.antennaService.findOne(catalog.idDetailProduct);
             }else {
                 product = [];
