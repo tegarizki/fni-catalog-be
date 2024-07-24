@@ -5,6 +5,7 @@ import Responses from '@/common/helper/responses.helper';
 import { AuthHelper } from '@/common/helper/auth.helper';
 import { UserService } from '@/common/services/user.service';
 import { UserEntity } from '@/common/entity/user.entity';
+import { LoginResultDto } from '@/common/dto/login-result.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -49,8 +50,15 @@ export class AuthController {
       }
   
       this.userService.updateLastLogin(user.id)
-
-      return Responses("success","Ok",this.helper.generateToken(user));
+      const result : LoginResultDto = {
+        fullName : user.fullName,
+        username : user.username,
+        token : this.helper.generateToken(user),
+        phone : user.phone,
+        email : user.email,
+        role : user.role
+      }
+      return Responses("success","Ok",result);
     } catch (err) {
       Logger.log("Error encountered: ", err);
       return Responses("failed", err.message, null);
