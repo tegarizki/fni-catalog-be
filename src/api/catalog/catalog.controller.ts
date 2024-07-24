@@ -18,6 +18,8 @@ import { SoftwareEntity } from "@/common/entity/software.entity";
 import { Repository } from "typeorm";
 import 'multer';
 import Responses from "@/common/helper/responses.helper";
+import { AntennaService } from "@/common/services/antenna.service";
+import { AntennaEntity } from "@/common/entity/atenna.entity";
 
 @Controller('catalog')
 @UseGuards(JwtAuthGuard)
@@ -27,7 +29,8 @@ export class CatalogController {
         private readonly aauService: AauService,
         private readonly bbuService: BbuService,
         private readonly rruService: RruService,
-        private readonly softwareService: SoftwareService
+        private readonly softwareService: SoftwareService,
+        private readonly antennaService: AntennaService
     ) {}
 
     @Get()
@@ -56,6 +59,8 @@ export class CatalogController {
                 return Responses("success", "Ok", await this.bbuService.findColumnName());
             } else if (typeRadio == "software") {
                 return Responses("success", "Ok", await this.softwareService.findColumnName());
+            } else if (typeRadio == "antenna") {
+                return Responses("success", "Ok", await this.antennaService.findColumnName());
             } else {
                 return Responses("success", "Ok", {});
             }
@@ -69,7 +74,7 @@ export class CatalogController {
     private async findOne( @Param('id') id: number ): Promise<object> {
         try {
             const catalog = await this.catalogService.findOne(id);
-            
+             
             let product;
             if (catalog.typeRadio == 'aau') {
                 product = await this.aauService.findOne(catalog.idDetailProduct);
@@ -79,7 +84,9 @@ export class CatalogController {
                 product = await this.bbuService.findOne(catalog.idDetailProduct);
             } else if (catalog.typeRadio == "software") {
                 product = await this.softwareService.findOne(catalog.idDetailProduct);
-            } else {
+            } else if (catalog.typeRadio == "atenna") {
+                product = await this.antennaService.findOne(catalog.idDetailProduct);
+            }else {
                 product = [];
             }
 
@@ -245,6 +252,29 @@ export class CatalogController {
 
                 const newSoftware = await this.softwareService.create(software);
                 id = newSoftware.id;
+            } else if (body.typeRadio == "antenna") {
+                const antenna = new AntennaEntity();
+                antenna.vendor = body.vendor;
+                antenna.product = body.product;
+                antenna.description = body.description;
+                antenna.frequencyBand = body.frequencyBand;
+                antenna.antennaGain = body.antennaGain;
+                antenna.port = body.port;
+                antenna.mimo = body.mimo;
+                antenna.tilt = body.tilt;
+                antenna.beam = body.beam;
+                antenna.weight = body.weight;
+                antenna.sizes = body.sizes;
+                antenna.powerSupply = body.powerSupply;
+                antenna.temperature = body.temperature;
+                antenna.ga = body.ga;
+                antenna.eos = body.eos;
+                antenna.imageName = image;
+                antenna.documentName = fileFNI;
+                antenna.documentTechnicalName = fileTechnical;
+
+                const newAntenna = await this.antennaService.create(antenna);
+                id = newAntenna.id;
             }
 
             const catalog = new CatalogEntity();
@@ -418,6 +448,28 @@ export class CatalogController {
                 software.documentTechnicalName = fileTechnical;
 
                 await this.softwareService.update(software.id,software);
+            } else if (body.typeRadio == "antenna") {
+                const antenna = await this.antennaService.findOne(catalog.idDetailProduct);
+                antenna.vendor = body.vendor;
+                antenna.product = body.product;
+                antenna.description = body.description;
+                antenna.frequencyBand = body.frequencyBand;
+                antenna.antennaGain = body.antennaGain;
+                antenna.port = body.port;
+                antenna.mimo = body.mimo;
+                antenna.tilt = body.tilt;
+                antenna.beam = body.beam;
+                antenna.weight = body.weight;
+                antenna.sizes = body.sizes;
+                antenna.powerSupply = body.powerSupply;
+                antenna.temperature = body.temperature;
+                antenna.ga = body.ga;
+                antenna.eos = body.eos;
+                antenna.imageName = image;
+                antenna.documentName = fileFNI;
+                antenna.documentTechnicalName = fileTechnical;
+
+                await this.antennaService.update(antenna.id,antenna);
             }
 
             catalog.productName = body.product;
@@ -446,6 +498,8 @@ export class CatalogController {
                 await this.bbuService.remove(catalog.idDetailProduct);
             } else if (catalog.typeRadio == "software") {
                 await this.softwareService.remove(catalog.idDetailProduct);
+            } else if (catalog.typeRadio == "antenna") {
+                await this.antennaService.remove(catalog.idDetailProduct);
             }
 
             await this.catalogService.remove(id);

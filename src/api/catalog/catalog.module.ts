@@ -12,10 +12,12 @@ import { AauService } from '@/common/services/aau.service';
 import { BbuService } from '@/common/services/bbu.service';
 import { RruService } from '@/common/services/rru.service';
 import { SoftwareService } from '@/common/services/software.service';
+import { AntennaEntity } from '@/common/entity/atenna.entity';
+import { AntennaService } from '@/common/services/antenna.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CatalogEntity,AauEntity,RruEntity,BbuEntity,SoftwareEntity]), AuthModule],
+  imports: [TypeOrmModule.forFeature([CatalogEntity,AauEntity,RruEntity,BbuEntity,SoftwareEntity,AntennaEntity]), AuthModule],
   controllers: [CatalogController],
-  providers: [CatalogService, AauService,BbuService,RruService,SoftwareService]
+  providers: [CatalogService, AauService,BbuService,RruService,SoftwareService,AntennaService]
 })
 export class CatalogModule {}
